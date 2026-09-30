@@ -16,7 +16,6 @@ RUN pip install --no-cache-dir \
     uvicorn \
     aiohttp \
     requests \
-    matplotlib \
     pillow \
     jinja2 \
     pydantic
