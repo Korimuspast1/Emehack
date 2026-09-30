@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pax Historia 2026 - Telegram Bot Studio & Simulator</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-header">
+                <div class="logo-icon">🏛️</div>
+                <div class="brand-text">
+                    <h2>PAX HISTORIA</h2>
+                    <span class="badge-2026">2026 AI ENGINE</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="tab-tg-sim">
+                    <span class="icon">💬</span> Telegram Бот Симулятор
+                </button>
+                <button class="nav-item" data-tab="tab-country-stats">
+                    <span class="icon">📊</span> Статистика и Редактор
+                </button>
+                <button class="nav-item" data-tab="tab-cyber-jamming">
+                    <span class="icon">🌐</span> Глушение Интернета и РЭБ
+                </button>
+                <button class="nav-item" data-tab="tab-actions-catalog">
+                    <span class="icon">⚡</span> Каталог 500+ Действий
+                </button>
+                <button class="nav-item" data-tab="tab-prompts-workshop">
+                    <span class="icon">📜</span> Мастерская Промптов
+                </button>
+                <button class="nav-item" data-tab="tab-ai-byok">
+                    <span class="icon">🤖</span> Настройки ИИ (BYOK)
+                </button>
+                <button class="nav-item" data-tab="tab-scenarios">
+                    <span class="icon">🌍</span> Сценарии и Эпохи
+                </button>
+            </nav>
+
+            <div class="session-hud">
+                <div class="hud-item">
+                    <span class="label">Держава:</span>
+                    <span class="val" id="hud-nation">Россия 🇷🇺</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">Дата:</span>
+                    <span class="val" id="hud-date">1 Января 2026 г.</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">Ход:</span>
+                    <span class="val" id="hud-turn">#0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">РЭБ/Глушение:</span>
+                    <span class="val badge-on" id="hud-jamming">АКТИВНО 🛰️</span>
+                </div>
+                <button class="btn-quick-jump" id="btn-global-quick-jump">⚡ Быстрый ход (+1 Месяц)</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- TAB 1: Telegram Bot Live Simulator -->
+            <section id="tab-tg-sim" class="tab-pane active">
+                <div class="tg-simulator-container">
+                    <div class="tg-chat-frame">
+                        <div class="tg-chat-header">
+                            <div class="tg-bot-avatar">🏛️</div>
+                            <div class="tg-bot-info">
+                                <h3>Pax Historia 2026 Bot</h3>
+                                <span class="tg-bot-status">● онлайн | 500+ функций | авто-скип до 1 месяца</span>
+                            </div>
+                            <div class="tg-actions">
+                                <button class="btn-icon" id="btn-refresh-sim" title="Обновить">🔄</button>
+                                <button class="btn-icon" id="btn-open-map-modal" title="Карта">🗺️</button>
+                            </div>
+                        </div>
+
+                        <div class="tg-messages-box" id="tg-messages-stream">
+                            <!-- Messages rendered by app.js -->
+                        </div>
+
+                        <div class="tg-input-bar">
+                            <input type="text" id="tg-input-text" placeholder="Напишите приказ, закон или промпт для ИИ..." autocomplete="off">
+                            <button id="tg-btn-send" class="btn-send">Отправить 🚀</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Real-time Map & Quick Controls -->
+                    <div class="tg-side-panel">
+                        <div class="panel-box">
+                            <div class="panel-header">
+                                <h4>🗺️ Оперативная карта фронтов</h4>
+                                <span class="badge-live">LIVE</span>
+                            </div>
+                            <div class="map-view-box">
+                                <img id="live-map-img" src="/api/map.png" alt="World Map">
+                            </div>
+                        </div>
+
+                        <div class="panel-box">
+                            <div class="panel-header">
+                                <h4>📰 Последние мировые события</h4>
+                            </div>
+                            <div class="events-feed-box" id="live-events-feed">
+                                <!-- Dynamic events feed -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: Country Statistics Inspector & Granular Modifier -->
+            <section id="tab-country-stats" class="tab-pane">
+                <div class="section-header">
+                    <h2>📊 Полная статистика и Редактор державы</h2>
+                    <p>Просматривайте и мгновенно изменяйте любые параметры государства в реальном времени</p>
+                </div>
+
+                <div class="stats-grid">
+                    <!-- Finance Card -->
+                    <div class="stat-card">
+                        <div class="card-header">💰 Экономика и Финансы</div>
+                        <div class="form-row">
+                            <label>Номинальный ВВП ($ млрд):</label>
+                            <input type="number" id="mod-gdp" class="stat-input" step="50">
+                        </div>
+                        <div class="form-row">
+                            <label>Казна и резервы ($ млрд):</label>
+                            <input type="number" id="mod-treasury" class="stat-input" step="10">
+                        </div>
+                        <div class="form-row">
+                            <label>Рост ВВП (% годовых):</label>
+                            <input type="number" id="mod-growth" class="stat-input" step="0.1">
+                        </div>
+                        <div class="form-row">
+                            <label>Налог на прибыль (%):</label>
+                            <input type="number" id="mod-tax-corp" class="stat-input" step="1">
+                        </div>
+                        <button class="btn-save-stat" data-group="eco">Сохранить экономику 💾</button>
+                    </div>
+
+                    <!-- Military Card -->
+                    <div class="stat-card">
+                        <div class="card-header">⚔️ Вооруженные силы & Арсенал</div>
+                        <div class="form-row">
+                            <label>Армейские дивизии:</label>
+                            <input type="number" id="mod-army-divs" class="stat-input" step="5">
+                        </div>
+                        <div class="form-row">
+                            <label>Рои ударных FPV-дронов:</label>
+                            <input type="number" id="mod-drone-swarms" class="stat-input" step="10">
+                        </div>
+                        <div class="form-row">
+                            <label>Ядерные боеголовки:</label>
+                            <input type="number" id="mod-nukes" class="stat-input" step="50">
+                        </div>
+                        <div class="form-row">
+                            <label>Гиперзвуковые ракеты:</label>
+                            <input type="number" id="mod-hypersonic" class="stat-input" step="10">
+                        </div>
+                        <button class="btn-save-stat" data-group="mil">Сохранить армию 💾</button>
+                    </div>
+
+                    <!-- Society Card -->
+                    <div class="stat-card">
+                        <div class="card-header">👥 Общество & Власть</div>
+                        <div class="form-row">
+                            <label>Стабильность (0 - 100%):</label>
+                            <input type="number" id="mod-stability" class="stat-input" min="0" max="100">
+                        </div>
+                        <div class="form-row">
+                            <label>Поддержка войны (%):</label>
+                            <input type="number" id="mod-war-support" class="stat-input" min="0" max="100">
+                        </div>
+                        <div class="form-row">
+                            <label>Политическая власть (PP):</label>
+                            <input type="number" id="mod-pp" class="stat-input" min="0" max="1000">
+                        </div>
+                        <div class="form-row">
+                            <label>Индекс коррупции (%):</label>
+                            <input type="number" id="mod-corruption" class="stat-input" min="0" max="100">
+                        </div>
+                        <button class="btn-save-stat" data-group="soc">Сохранить общество 💾</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: Cyber Warfare & Internet Jamming Controls -->
+            <section id="tab-cyber-jamming" class="tab-pane">
+                <div class="section-header">
+                    <h2>🌐 Центр управления РЭБ, Глушением Интернета и Кибервойнами (2026)</h2>
+                    <p>Контролируйте магистральные оптоволоконные каналы, глушение спутников и суверенные файрволы</p>
+                </div>
+
+                <div class="cyber-control-grid">
+                    <div class="cyber-card">
+                        <h3>📶 Статус национального интернета</h3>
+                        <div class="toggle-group">
+                            <button class="btn-cyber-toggle active" id="btn-net-online" data-val="ONLINE">🟢 ONLINE (Открытая сеть)</button>
+                            <button class="btn-cyber-toggle" id="btn-net-blackout" data-val="PARTIAL_BLACKOUT">🟡 ЧАСТИЧНЫЙ БЛЭКАУТ</button>
+                            <button class="btn-cyber-toggle" id="btn-net-shutdown" data-val="FULL_SHUTDOWN">🔴 ПОЛНОЕ ОТКЛЮЧЕНИЕ</button>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3>🛰️ Глушение GPS, ГЛОНАСС & Starlink</h3>
+                        <p>Подавление частот спутниковой навигации и управления дронами на линии фронта.</p>
+                        <button class="btn-action-primary" id="btn-toggle-gps-jamming">Переключить глушение GPS/РЭБ</button>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3>🛡️ DPI & Суверенный Файрвол</h3>
+                        <p>Глубокая фильтрация пакетов, блокировка враждебных VPN и координационных каналов.</p>
+                        <button class="btn-action-primary" id="btn-toggle-dpi">Переключить DPI Файрвол</button>
+                    </div>
+
+                    <div class="cyber-card">
+                        <h3>🤖 Автономный ИИ-ботнет когнитивной войны</h3>
+                        <p>Запуск миллионов виртуальных агентов для информационного доминирования за рубежом.</p>
+                        <button class="btn-action-accent" id="btn-launch-ai-botnet">Запустить ботнет дезинформации 🚀</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: 500+ Actions Catalog -->
+            <section id="tab-actions-catalog" class="tab-pane">
+                <div class="section-header">
+                    <h2>⚡ Каталог 500+ Государственных Действий и Механизмов</h2>
+                    <div class="catalog-filters">
+                        <input type="text" id="action-search-input" placeholder="🔍 Поиск среди 500+ действий...">
+                        <select id="action-category-select">
+                            <option value="all">Все категории (500+ действий)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="actions-table-box">
+                    <div class="actions-grid-list" id="actions-rendered-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: AI Prompts Workshop -->
+            <section id="tab-prompts-workshop" class="tab-pane">
+                <div class="section-header">
+                    <h2>📜 Мастерская системных промптов (12 Категорий Pax Historia)</h2>
+                    <p>Редактируйте системные инструкции для ИИ с поддержкой шаблонов переменных</p>
+                </div>
+
+                <div class="prompts-editor-container">
+                    <div class="prompts-sidebar" id="prompts-category-list">
+                        <!-- Category buttons -->
+                    </div>
+                    <div class="prompts-main-editor">
+                        <div class="editor-header">
+                            <h3 id="current-prompt-title">Категория: jump_forward</h3>
+                            <button class="btn-save-prompt" id="btn-save-current-prompt">Сохранить промпт 💾</button>
+                        </div>
+                        <textarea id="prompt-editor-textarea" rows="14"></textarea>
+                        <div class="template-tags-helper">
+                            <span>Доступные переменные:</span>
+                            <code>{NATION}</code> <code>{YEAR}</code> <code>{DATE}</code> <code>{LEADER}</code> <code>{IDEOLOGY}</code>
+                            <code>{STABILITY}</code> <code>{GDP}</code> <code>{TREASURY}</code> <code>{ARMY_DIVISIONS}</code>
+                            <code>{INTERNET_STATUS}</code> <code>{GPS_JAMMING}</code> <code>{PLAYER_ACTION}</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: AI BYOK Settings -->
+            <section id="tab-ai-byok" class="tab-pane">
+                <div class="section-header">
+                    <h2>🤖 Подключение своего ИИ (Bring Your Own Key)</h2>
+                    <p>Подключите OpenRouter, OpenAI, Groq, Anthropic, DeepSeek, Ollama или свой HTTP endpoint</p>
+                </div>
+
+                <div class="byok-card">
+                    <div class="form-row">
+                        <label>AI Провайдер:</label>
+                        <select id="byok-provider-select">
+                            <option value="builtin">🧠 Встроенный нейросимулятор (Default / High Performance)</option>
+                            <option value="openrouter">🌐 OpenRouter (Доступ ко всем 200+ LLM)</option>
+                            <option value="openai">🟢 OpenAI (GPT-4o, GPT-4o-mini, o1)</option>
+                            <option value="groq">⚡ Groq (Llama 3.3 70B Ultra-Fast)</option>
+                            <option value="anthropic">🟣 Anthropic (Claude 3.5 Sonnet / Haiku)</option>
+                            <option value="deepseek">🔵 DeepSeek API (Chat / Reasoner)</option>
+                            <option value="ollama">💻 Ollama (Локальный сервер / http://localhost:11434/v1)</option>
+                            <option value="custom">🔗 Свой Custom OpenAI-совместимый Endpoint</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <label>API Ключ (Bearer Token):</label>
+                        <input type="password" id="byok-api-key" placeholder="sk-...">
+                    </div>
+
+                    <div class="form-row">
+                        <label>Имя модели (Model ID):</label>
+                        <input type="text" id="byok-model-id" placeholder="например: google/gemini-2.0-flash-001">
+                    </div>
+
+                    <div class="form-row" id="row-custom-endpoint" style="display:none;">
+                        <label>Custom Endpoint URL:</label>
+                        <input type="text" id="byok-custom-endpoint" placeholder="https://api.yourdomain.com/v1/chat/completions">
+                    </div>
+
+                    <div class="form-row">
+                        <label>Температура генерации (0.0 - 1.0):</label>
+                        <input type="number" id="byok-temperature" min="0.0" max="1.0" step="0.1" value="0.7">
+                    </div>
+
+                    <button class="btn-save-byok" id="btn-save-byok-settings">Применить настройки ИИ 🚀</button>
+                </div>
+            </section>
+
+            <!-- TAB 7: Scenarios & Eras -->
+            <section id="tab-scenarios" class="tab-pane">
+                <div class="section-header">
+                    <h2>🌍 Исторические сценарии и Альтернативная история</h2>
+                </div>
+
+                <div class="scenarios-grid" id="scenarios-rendered-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
