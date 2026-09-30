@@ -9,6 +9,7 @@ TELEGRAM_BOT_TOKEN = os.getenv(
     "BOT_TOKEN", 
     "7389083158:AAEz8Dqw0WPn6RBu4rzGDXWtBaU_pVEKLmM"
 )
+TELEGRAM_PROXY_URL = os.getenv("TELEGRAM_PROXY_URL", None)
 
 DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/user/Emehack/data/pax_historia.db")
 WEB_HOST = os.getenv("WEB_HOST", "0.0.0.0")
@@ -54,18 +55,18 @@ DEFAULT_MODELS: Dict[str, str] = {
 
 # 12 Pax Historia Prompt Categories
 PROMPT_CATEGORIES = [
-    "jump_forward",           # Time progression & geopolitical butterfly effect
-    "chat_diplomacy",         # 1-on-1 diplomatic negotiations with foreign leaders
-    "chat_advisor",           # Strategic counselor & intelligence briefings
-    "action_enhance",         # AI optimizes and adds doctrine nuance to player actions
-    "action_brainstorm",      # AI generates 5 tailored strategic recommendations
-    "description_to_action",  # Parses free-text directives into stat changes
-    "summit_speaker",         # Multi-nation UN/Summit conference dialogues
-    "event_consolidator",     # Context compression & memory bank
-    "war_resolution",         # Tactical combat & frontline calculation
-    "peace_treaty",           # Post-war negotiation terms
-    "espionage_operation",    # Cyber attacks, internet jamming, covert ops
-    "custom_event"            # Sandbox world crisis triggers
+    "jump_forward",
+    "chat_diplomacy",
+    "chat_advisor",
+    "action_enhance",
+    "action_brainstorm",
+    "description_to_action",
+    "summit_speaker",
+    "event_consolidator",
+    "war_resolution",
+    "peace_treaty",
+    "espionage_operation",
+    "custom_event"
 ]
 
 # Difficulties

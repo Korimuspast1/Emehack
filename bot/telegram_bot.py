@@ -2,13 +2,14 @@
 Telegram Bot Application Setup & Dispatcher for Pax Historia (2026 Engine)
 """
 import logging
+import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler, MessageHandler,
     filters, ContextTypes
 )
 
-from config import TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN, TELEGRAM_PROXY_URL
 import database
 from game.engine import (
     get_or_load_session, submit_action_and_auto_skip, modify_country_stat
@@ -168,7 +169,11 @@ async def handle_free_text_message(update: Update, context: ContextTypes.DEFAULT
 
 def build_bot_application() -> Application:
     """Builds and registers all handlers on the Telegram Bot Application."""
-    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    builder = Application.builder().token(TELEGRAM_BOT_TOKEN)
+    if TELEGRAM_PROXY_URL:
+        builder = builder.proxy_url(TELEGRAM_PROXY_URL).get_updates_proxy_url(TELEGRAM_PROXY_URL)
+        
+    app = builder.build()
 
     # Commands
     app.add_handler(CommandHandler("start", cmd_start))
