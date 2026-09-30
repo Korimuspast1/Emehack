@@ -4,6 +4,8 @@ Pax Historia Telegram Bot - Configuration & Constants (2026 Edition)
 import os
 from typing import Dict, Any
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Bot Configuration
 TELEGRAM_BOT_TOKEN = os.getenv(
     "BOT_TOKEN", 
@@ -11,7 +13,7 @@ TELEGRAM_BOT_TOKEN = os.getenv(
 )
 TELEGRAM_PROXY_URL = os.getenv("TELEGRAM_PROXY_URL", None)
 
-DATABASE_PATH = os.getenv("DATABASE_PATH", "/home/user/Emehack/data/pax_historia.db")
+DATABASE_PATH = os.getenv("DATABASE_PATH", os.path.join(BASE_DIR, "data", "pax_historia.db"))
 WEB_HOST = os.getenv("WEB_HOST", "0.0.0.0")
 WEB_PORT = int(os.getenv("WEB_PORT", "8080"))
 

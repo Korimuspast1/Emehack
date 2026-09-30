@@ -12,7 +12,7 @@ import json
 from typing import Dict, Any, Optional
 
 import database
-from config import WEB_HOST, WEB_PORT, PROMPT_CATEGORIES, SUPPORTED_PROVIDERS, DEFAULT_MODELS
+from config import WEB_HOST, WEB_PORT, PROMPT_CATEGORIES, SUPPORTED_PROVIDERS, DEFAULT_MODELS, BASE_DIR
 from game.presets import get_all_presets, get_preset_by_id
 from game.actions_registry import get_all_actions, get_all_categories, get_action_by_id
 from game.engine import (
@@ -33,16 +33,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static folder
-os.makedirs("/home/user/Emehack/web/static", exist_ok=True)
-os.makedirs("/home/user/Emehack/web/templates", exist_ok=True)
-app.mount("/static", StaticFiles(directory="/home/user/Emehack/web/static"), name="static")
+STATIC_DIR = os.path.join(BASE_DIR, "web", "static")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "web", "templates")
+INDEX_HTML_PATH = os.path.join(TEMPLATES_DIR, "index.html")
+
+os.makedirs(STATIC_DIR, exist_ok=True)
+os.makedirs(TEMPLATES_DIR, exist_ok=True)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 DEFAULT_DEMO_USER_ID = 10001
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_index():
-    with open("/home/user/Emehack/web/templates/index.html", "r", encoding="utf-8") as f:
+    with open(INDEX_HTML_PATH, "r", encoding="utf-8") as f:
         return f.read()
 
 @app.get("/api/state")
